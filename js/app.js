@@ -17,16 +17,27 @@ window.onload = function () {
 }
 
 
-var table = [
-    { id: "1", team: "United", played: "", wins: "", draws: "", losses: "", goalsFor: "20", goalsAgainst: "", goalDifference: "19", points: "99"},
-    { id: "2", team: "City", played: "", wins: "", draws: "", losses: "", goalsFor: "25", goalsAgainst: "", goalDifference: "20", points: "98"},
-    { id: "3", team: "Chelsea", played: "", wins: "", draws: "", losses: "", goalsFor: "10", goalsAgainst: "", goalDifference: "18", points: "90"}
-];
+var teams = {};
+var games;
+function loadTeams(t) {
+    for (var i = 0; i < t.length; i++) {
+        teams[ t[i].id ] = t[i];
+    };
+};
+
+function loadGames(g) {
+    games = g;
+};
 
 
-// Sorts the multidimensional array we are storing the table as, according to the rules.
-function sortTable (table) {
-    table.sort(function (a, b) {
+
+function getSortedTable(table) {
+    var sortedTable = [];
+    Object.keys(table).forEach(function(key) {
+        sortedTable.push(table[key]);
+    });
+
+    sortedTable.sort(function (a, b) {
         if (a.points < b.points) return  1;
         if (a.points > b.points) return  -1;
 
@@ -45,14 +56,6 @@ function sortTable (table) {
 
 
 
-var teams, games;
-function loadTeams(t) {
-    teams = t;
-};
-
-function loadGames(g) {
-    games = g;
-};
 
 
 
