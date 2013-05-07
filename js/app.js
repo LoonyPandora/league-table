@@ -5,17 +5,38 @@
 // NOT doing this may improve performance, but it would be a premature
 // optimization at this stage with such a trivial app and no performance issues
 window.onload = function () {
-    calculateDates();
+    // calculateDates();
+
+    // Get the games into a useful data structure. An object keyed by date seems sensible
+    var gamesByDate = {};
+
+    // Only modern browsers need apply
+    games.map(function(game) {
+
+        // A bit hairy. Clean this up
+        var gameDateISO = game.date.split("/").reverse();
+        gameDateISO[0] = 20 + gameDateISO[0];
+        gameDateISO = gameDateISO.join("-");
+
+        if (!gamesByDate[gameDateISO]) {
+            gamesByDate[gameDateISO] = [];
+        }
+
+        gamesByDate[gameDateISO].push(game);
+    });
+
+    console.log(gamesByDate);
+
 }
 
 
-
-function loadTeams(teams) {
-    // console.log(teams);
+var teams, games;
+function loadTeams(t) {
+    teams = t;
 };
 
-function loadGames(games) {
-    // console.log(games);
+function loadGames(g) {
+    games = g;
 };
 
 
@@ -33,7 +54,7 @@ function calculateDates() {
     for (var i = 0; i < monthNames.length; i++) {
         // Changing the length of months to be zero-indexed could be confusing, I think this is more readable
         for (var j = 0; j < monthLengths[i]; j++) {
-            console.log(j + 1, getOrdinal(j + 1), monthNames[i]);
+            // console.log(j + 1, getOrdinal(j + 1), monthNames[i]);
         };
     };
 }
