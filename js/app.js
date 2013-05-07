@@ -12,9 +12,37 @@ window.onload = function () {
         ISODates[convertToISO8601(games[key].date)].push(games[key]);
     });
 
-    console.log(ISODates);
+    // console.log(ISODates);
 
 }
+
+
+var table = [
+    { id: "1", team: "United", played: "", wins: "", draws: "", losses: "", goalsFor: "20", goalsAgainst: "", goalDifference: "19", points: "99"},
+    { id: "2", team: "City", played: "", wins: "", draws: "", losses: "", goalsFor: "25", goalsAgainst: "", goalDifference: "20", points: "98"},
+    { id: "3", team: "Chelsea", played: "", wins: "", draws: "", losses: "", goalsFor: "10", goalsAgainst: "", goalDifference: "18", points: "90"}
+];
+
+
+// Sorts the multidimensional array we are storing the table as, according to the rules.
+function sortTable (table) {
+    table.sort(function (a, b) {
+        if (a.points < b.points) return  1;
+        if (a.points > b.points) return  -1;
+
+        if (a.goalDifference < b.goalDifference) return  1;
+        if (a.goalDifference > b.goalDifference) return  -1;
+
+        if (a.goalsFor < b.goalsFor) return  1;
+        if (a.goalsFor > b.goalsFor) return  -1;
+
+        return 0;
+    });
+
+    return table;
+}
+
+
 
 
 var teams, games;
