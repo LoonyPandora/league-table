@@ -9,12 +9,41 @@ window.onload = function () {
 
     // May as well use the fast modern tools we have available if we don't support old browsers
     Object.keys(games).forEach(function(key) {
-        ISODates[convertToISO8601(games[key].date)].push(games[key]);
+
+        console.log(games[key]);
+
+        // The goals are a string instead of a numeric for some reason.
+        // Probably as a hidden gotcha in this test, but maybe not.
+
+
+        // This is super fugly munging data. Refactor it ASAP
+        if (!teams[games[key].homeTeamId].goalsFor)      teams[games[key].homeTeamId].goalsFor     = 0;
+        if (!teams[games[key].homeTeamId].goalsAgainst)  teams[games[key].homeTeamId].goalsAgainst = 0;
+        if (!teams[games[key].awayTeamId].goalsFor)      teams[games[key].awayTeamId].goalsFor     = 0;
+        if (!teams[games[key].awayTeamId].goalsAgainst)  teams[games[key].awayTeamId].goalsAgainst = 0;
+        
+        
+        teams[games[key].homeTeamId].goalsFor     += parseInt(games[key].homeGoals, 10);
+        teams[games[key].awayTeamId].goalsFor     += parseInt(games[key].awayGoals, 10);
+
+        teams[games[key].awayTeamId].goalsAgainst += parseInt(games[key].homeGoals, 10);
+        teams[games[key].homeTeamId].goalsAgainst += parseInt(games[key].awayGoals, 10);
+
+
+        // ISODates[convertToISO8601(games[key].date)].push(games[key]);
     });
 
-    // console.log(ISODates);
+    console.log(teams, getSortedTable(teams));
 
 }
+
+
+var table = [
+    { id: "1", team: "United", played: "", wins: "", draws: "", losses: "", goalsFor: "20", goalsAgainst: "", goalDifference: "19", points: "99"},
+    { id: "2", team: "City", played: "", wins: "", draws: "", losses: "", goalsFor: "25", goalsAgainst: "", goalDifference: "20", points: "98"},
+    { id: "3", team: "Chelsea", played: "", wins: "", draws: "", losses: "", goalsFor: "10", goalsAgainst: "", goalDifference: "18", points: "90"}
+];
+
 
 
 var teams = {};
@@ -50,7 +79,9 @@ function getSortedTable(table) {
         return 0;
     });
 
-    return table;
+    // console.log(table)
+
+    return sortedTable;
 }
 
 
