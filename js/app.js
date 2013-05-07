@@ -39,6 +39,8 @@ window.onload = function () {
                 homeTeam.losses++;
                 awayTeam.wins++;
                 awayTeam.points += 3;
+            } else {
+                // Richmond Arithmetic versus Nottingham Marjorie - Match postponed due to bent pitch
             }
         });
     });
@@ -153,6 +155,7 @@ function createDateRange() {
     years.forEach(function(year) {
         monthLengths.forEach(function(monthLength, monthNumber) {
             for (var monthDay = 0; monthDay < monthLength; monthDay++) {
+                // All the month related stuff is zero indexed. Have to add 1 for display to humans
                 ISODates.push(year + "-" + pad(monthNumber + 1) + "-" + pad(monthDay + 1))
             };
         });
