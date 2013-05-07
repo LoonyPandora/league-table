@@ -7,3 +7,13 @@
 window.onload = function () {
 
 }
+
+
+
+function loadTeams(teams) {
+    console.log(teams);
+};
+
+function loadGames(games) {
+    console.log(games);
+};
