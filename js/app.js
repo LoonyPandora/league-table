@@ -8,29 +8,41 @@ window.onload = function () {
     var ISODates = createDateRange();
 
     // May as well use the fast modern tools we have available if we don't support old browsers
-    Object.keys(games).forEach(function(key) {
+    Object.keys(games).forEach(function(date) {
+        Object.keys(games[date]).forEach(function(fixture) {
+            var game = games[date][fixture];
 
-        console.log(games[key]);
+            var homeTeam = teams[game.homeTeamId];
+            var awayTeam = teams[game.awayTeamId];
 
-        // The goals are a string instead of a numeric for some reason.
-        // Probably as a hidden gotcha in this test, but maybe not.
+            homeTeam.played++;
+            homeTeam.goalsFor += game.homeGoals;
+            homeTeam.goalsAgainst += game.awayGoals;
+            homeTeam.goalDifference += (game.homeGoals - game.awayGoals);
 
+            awayTeam.played++;
+            awayTeam.goalsFor += game.awayGoals;
+            awayTeam.goalsAgainst += game.homeGoals;
+            awayTeam.goalDifference += (game.awayGoals - game.homeGoals);
 
-        // This is super fugly munging data. Refactor it ASAP
-        if (!teams[games[key].homeTeamId].goalsFor)      teams[games[key].homeTeamId].goalsFor     = 0;
-        if (!teams[games[key].homeTeamId].goalsAgainst)  teams[games[key].homeTeamId].goalsAgainst = 0;
-        if (!teams[games[key].awayTeamId].goalsFor)      teams[games[key].awayTeamId].goalsFor     = 0;
-        if (!teams[games[key].awayTeamId].goalsAgainst)  teams[games[key].awayTeamId].goalsAgainst = 0;
-        
-        
-        teams[games[key].homeTeamId].goalsFor     += parseInt(games[key].homeGoals, 10);
-        teams[games[key].awayTeamId].goalsFor     += parseInt(games[key].awayGoals, 10);
-
-        teams[games[key].awayTeamId].goalsAgainst += parseInt(games[key].homeGoals, 10);
-        teams[games[key].homeTeamId].goalsAgainst += parseInt(games[key].awayGoals, 10);
-
-
-        // ISODates[convertToISO8601(games[key].date)].push(games[key]);
+            if (game.homeGoals - game.awayGoals > 0) {
+                // Home Win
+                homeTeam.wins++;
+                homeTeam.points += 3;
+                awayTeam.losses++;
+            } else if (game.homeGoals - game.awayGoals === 0) {
+                // Draw
+                homeTeam.draws++;
+                homeTeam.points += 1;
+                awayTeam.draws++;
+                awayTeam.points += 1;
+            } else if (game.homeGoals - game.awayGoals < 0) {
+                // Away Win
+                homeTeam.losses++;
+                awayTeam.wins++;
+                awayTeam.points += 3;
+            }
+        });
     });
 
     console.log(teams, getSortedTable(teams));
@@ -38,30 +50,48 @@ window.onload = function () {
 }
 
 
-var table = [
-    { id: "1", team: "United", played: "", wins: "", draws: "", losses: "", goalsFor: "20", goalsAgainst: "", goalDifference: "19", points: "99"},
-    { id: "2", team: "City", played: "", wins: "", draws: "", losses: "", goalsFor: "25", goalsAgainst: "", goalDifference: "20", points: "98"},
-    { id: "3", team: "Chelsea", played: "", wins: "", draws: "", losses: "", goalsFor: "10", goalsAgainst: "", goalDifference: "18", points: "90"}
-];
-
-
-
 var teams = {};
-var games;
+var games = {};
 function loadTeams(t) {
-    for (var i = 0; i < t.length; i++) {
-        teams[ t[i].id ] = t[i];
-    };
+    Object.keys(t).forEach(function(key) {
+        teams[ t[key].id ] = {
+            id:             t[key].id,
+            name:           t[key].name,
+            played:         0,
+            wins:           0,
+            draws:          0,
+            losses:         0,
+            goalsFor:       0,
+            goalsAgainst:   0,
+            goalDifference: 0,
+            points:         0
+        };
+    });
 };
 
 function loadGames(g) {
-    games = g;
+    Object.keys(g).forEach(function(key) {
+        var ISODate = convertToISO8601(g[key].date);
+
+        if (!games[ISODate]) { games[ISODate] = []; }
+
+        // The goals are a string instead of a numeric for some reason.
+        // Probably as a potential gotcha in this test..
+        games[ISODate].push({
+            date:       ISODate,
+            homeTeamId: g[key].homeTeamId,
+            awayTeamId: g[key].awayTeamId,
+            homeGoals:  parseInt(g[key].homeGoals, 10),
+            awayGoals:  parseInt(g[key].awayGoals, 10)
+        });
+    });
 };
 
 
 
 function getSortedTable(table) {
     var sortedTable = [];
+
     Object.keys(table).forEach(function(key) {
         sortedTable.push(table[key]);
     });
@@ -78,8 +108,6 @@ function getSortedTable(table) {
 
         return 0;
     });
-
-    // console.log(table)
 
     return sortedTable;
 }
@@ -98,11 +126,11 @@ function getOrdinal(number) {
 
     if (number > 3 && number < 21) {
         return "th";
-    } else if (end == 1) {
+    } else if (end === 1) {
         return "st";
-    } else if (end == 2) {
+    } else if (end === 2) {
         return "nd";
-    } else if (end == 3) {
+    } else if (end === 3) {
         return "rd";
     } else {
         return "th";
@@ -136,8 +164,8 @@ function createDateRange() {
 }
 
 
+// A bit hairy. Clean this up
 function convertToISO8601(date) {
-    // A bit hairy. Clean this up
     var ISODate = date.split("/").reverse();
     ISODate[0] = 20 + ISODate[0];
     ISODate[1] = pad(ISODate[1]);
