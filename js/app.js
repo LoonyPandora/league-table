@@ -9,9 +9,7 @@ window.onload = function () {
 
     // May as well use the fast modern tools we have available if we don't support old browsers
     Object.keys(games).forEach(function(date) {
-        Object.keys(games[date]).forEach(function(fixture) {
-            var game = games[date][fixture];
-
+        games[date].forEach(function(game) {
             var homeTeam = teams[game.homeTeamId];
             var awayTeam = teams[game.awayTeamId];
 
@@ -52,11 +50,11 @@ window.onload = function () {
 
 var teams = {};
 var games = {};
-function loadTeams(t) {
-    Object.keys(t).forEach(function(key) {
-        teams[ t[key].id ] = {
-            id:             t[key].id,
-            name:           t[key].name,
+function loadTeams(teamList) {
+    teamList.forEach(function(team) {
+        teams[ team.id ] = {
+            id:             team.id,
+            name:           team.name,
             played:         0,
             wins:           0,
             draws:          0,
@@ -69,9 +67,9 @@ function loadTeams(t) {
     });
 };
 
-function loadGames(g) {
-    Object.keys(g).forEach(function(key) {
-        var ISODate = convertToISO8601(g[key].date);
+function loadGames(gameList) {
+    gameList.forEach(function(game) {
+        var ISODate = convertToISO8601(game.date);
 
         if (!games[ISODate]) { games[ISODate] = []; }
 
@@ -79,10 +77,10 @@ function loadGames(g) {
         // Probably as a potential gotcha in this test..
         games[ISODate].push({
             date:       ISODate,
-            homeTeamId: g[key].homeTeamId,
-            awayTeamId: g[key].awayTeamId,
-            homeGoals:  parseInt(g[key].homeGoals, 10),
-            awayGoals:  parseInt(g[key].awayGoals, 10)
+            homeTeamId: game.homeTeamId,
+            awayTeamId: game.awayTeamId,
+            homeGoals:  parseInt(game.homeGoals, 10),
+            awayGoals:  parseInt(game.awayGoals, 10)
         });
     });
 };
@@ -144,23 +142,24 @@ function getOrdinal(number) {
 // http://youtu.be/OhjOXrFHL7o
 
 // Gives us a nice list of ISO dates for 2011 and 2012
-// It's a larger range than we need, but the code is simpler and more readable this way.
+// 2012 is a leap year, but 2011 isn't. We don't include Feb 2011 in our calculations
+// So this doesn't matter. A non-trivial application would have to take this into account
 function createDateRange() {
     var years = [2011, 2012];
     var monthLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-    var ISODates = {};
-    // Nested loops aren't cool...
-    for (var i = 0; i < years.length; i++) {
-        for (var j = 0; j < monthLengths.length; j++) {
-            for (var x = 0; x < monthLengths[j]; x++) {
-                ISODates[years[i] + "-" + pad(j + 1) + "-" + pad(x + 1)] = [];
+    var ISODates = [];
+    // Native forEach loops are cool
+    years.forEach(function(year) {
+        monthLengths.forEach(function(monthLength, monthNumber) {
+            for (var monthDay = 0; monthDay < monthLength; monthDay++) {
+                ISODates.push(year + "-" + pad(monthNumber + 1) + "-" + pad(monthDay + 1))
             };
-            
-        };
-    };
+        });
+    });
 
-    return ISODates;
+    // We only need August 12th, 2011 - May 13th, 2012
+    return ISODates.slice(224,500);
 }
 
 
