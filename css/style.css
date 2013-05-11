@@ -28,7 +28,7 @@ td, th {
 }
 
 /* Zebra Strips */
-tbody tr:nth-child(odd) {
+tr:nth-child(odd) {
     background: rgba(255,255,255,0.5);
 }
 
@@ -37,3 +37,5 @@ tr td:nth-child(1) {
     width: 150px;
 }
 
+tr.up   { background-color: rgba(64,255,64, 0.5); }
+tr.down { background-color: rgba(255,64,64, 0.5); }
