@@ -18,7 +18,7 @@ window.onload = function () {
 
         // 104 matchdays in this years season
         if (i === 104) clearInterval(interval);
-    }, 50);
+    }, 500);
 }
 
 
@@ -145,7 +145,15 @@ function playGames() {
 function updateHTML(table) {
     var output = "";
     table.forEach(function(team) {
-        output += "<tr>";
+        
+        var classList = "";
+        if (team.movement == "up") {
+            classList = "animated fadeInUp up";
+        } else if (team.movement == "down") {
+            classList = "animated fadeInDown down";
+        }
+
+        output += '<tr class="' + classList + '">';
         output += "<td>" + team.name + "</td>";
         output += "<td>" + team.played + "</td>";
         output += "<td>" + team.wins + "</td>";
