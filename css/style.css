@@ -4,8 +4,9 @@ html {
 }
 
 body {
-    font-size: 18px;
-    line-height: 1.5em;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 2em;
     background-image: url("../img/bg.jpg");
     background-color: #6c9b45;
     color: #222;
@@ -17,3 +18,22 @@ table {
     width: 600px;
     height: 600px;
 }
+
+th {
+    text-align: left;
+}
+
+td, th {
+    padding: 0 10px;
+}
+
+/* Zebra Strips */
+tbody tr:nth-child(odd) {
+    background: rgba(255,255,255,0.5);
+}
+
+/* Give the team name a bit more width than strictly necessary */
+tr td:nth-child(1) {
+    width: 150px;
+}
+
