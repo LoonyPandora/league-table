@@ -43,18 +43,22 @@ window.onload = function () {
                 // Richmond Arithmetic versus Nottingham Marjorie - Match postponed due to bent pitch
             }
         });
+
+        // This is the table after all the games on a given date
+        tablesByDate[date] = getSortedTable(teams);
     });
 
-    console.log(teams, getSortedTable(teams));
+
+    console.log(tablesByDate);
 
 }
 
-
+var tablesByDate = {};
 var teams = {};
 var games = {};
 function loadTeams(teamList) {
     teamList.forEach(function(team) {
-        teams[ team.id ] = {
+        teams[team.id] = {
             id:             team.id,
             name:           team.name,
             played:         0,
