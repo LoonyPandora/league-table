@@ -72,9 +72,45 @@ window.onload = function () {
         });
     });
 
-    console.log(tablesByDate);
+    // console.log(tablesByDate);
+    
+    
+    Object.keys(tablesByDate).forEach(function (table) {
+        generateHTMLTable(tablesByDate[table]);
+        // exit();
+    })
+}
+
+
+// Generates the body portion of the table
+// Normally I'd use a templating library like mustache
+function generateHTMLTable(table) {
+
+    var template = '<tr><td>{{team}}</td><td>{{points}}</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>';
+
+    var output = "";
+    table.forEach(function(team) {
+        // console.log(team);
+        output += "<tr>";
+        output += "<td>" + team.name + "</td>";
+        output += "<td>" + team.played + "</td>";
+        output += "<td>" + team.wins + "</td>";
+        output += "<td>" + team.draws + "</td>";
+        output += "<td>" + team.losses + "</td>";
+        output += "<td>" + team.goalsFor + "</td>";
+        output += "<td>" + team.goalsAgainst + "</td>";
+        output += "<td>" + team.goalDifference + "</td>";
+        output += "<td>" + team.points + "</td>";
+        output += "</tr>\n";
+    });
+
+    // document.getElement
+
+    $("table > tbody").innerHTML = output;
+    // console.log(output);
 
 }
+
 
 
 var tablesByDate = {};
@@ -215,6 +251,12 @@ function pad(number) {
         str = "0" + str;
     }
     return str;
-};
+}
 
+
+
+// gives a nice jQuery-like way of selecting things
+function $(expr) {
+    return document.querySelectorAll(expr)[0];
+}
 
