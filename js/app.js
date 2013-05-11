@@ -8,7 +8,7 @@ window.onload = function () {
     var ISODates = createDateRange();
 
     // May as well use the fast modern tools we have available if we don't support old browsers
-    Object.keys(games).forEach(function(date) {
+    Object.keys(games).forEach(function(date, index, dates) {
         games[date].forEach(function(game) {
             var homeTeam = teams[game.homeTeamId];
             var awayTeam = teams[game.awayTeamId];
@@ -46,6 +46,30 @@ window.onload = function () {
 
         // This is the table after all the games on a given date
         tablesByDate[date] = getSortedTable(teams);
+
+        // Now calculate the movement of teams between matchdays
+        tablesByDate[date].forEach(function(team, position) {
+            team.position = position;
+
+            // Gets the position from the previous matchday table
+            if (dates[index-1]) {
+                tablesByDate[dates[index-1]].forEach(function(lastTeam) {
+                    if (team.id === lastTeam.id) {
+                        // LOWER position numbers are higher up the table
+                        // That's why the logic seems reversed.
+                        // It makes sense when working with the HTML
+
+                        if (team.position < lastTeam.position) {
+                            team.movement = "up";
+                        } else if (team.position > lastTeam.position) {
+                            team.movement = "down";
+                        } else {
+                            team.movement = "";
+                        }
+                    }
+                });
+            }
+        });
     });
 
     console.log(tablesByDate);
@@ -93,11 +117,11 @@ function loadGames(gameList) {
 
 
 
-function getSortedTable(table) {
+function getSortedTable(teams) {
     var sortedTable = [];
 
     // REALLY ugly way to clone an object. Normally would use a library that's cleaner...
-    var clonedTable = JSON.parse(JSON.stringify(table));
+    var clonedTable = JSON.parse(JSON.stringify(teams));
 
     Object.keys(clonedTable).forEach(function(key) {
         sortedTable.push(clonedTable[key]);
