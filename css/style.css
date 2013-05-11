@@ -1,0 +1,19 @@
+
+html {
+    background: transparent;
+}
+
+body {
+    font-size: 18px;
+    line-height: 1.5em;
+    background-image: url("../img/bg.jpg");
+    background-color: #6c9b45;
+    color: #222;
+}
+
+table {
+    background: rgba(255,255,255,0.8);
+    margin: 50px 0 0 80px;
+    width: 600px;
+    height: 600px;
+}
