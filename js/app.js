@@ -72,12 +72,8 @@ window.onload = function () {
         });
     });
 
-    // console.log(tablesByDate);
-    
-    
     Object.keys(tablesByDate).forEach(function (table) {
         generateHTMLTable(tablesByDate[table]);
-        // exit();
     })
 }
 
@@ -85,12 +81,8 @@ window.onload = function () {
 // Generates the body portion of the table
 // Normally I'd use a templating library like mustache
 function generateHTMLTable(table) {
-
-    var template = '<tr><td>{{team}}</td><td>{{points}}</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>';
-
     var output = "";
     table.forEach(function(team) {
-        // console.log(team);
         output += "<tr>";
         output += "<td>" + team.name + "</td>";
         output += "<td>" + team.played + "</td>";
@@ -104,11 +96,7 @@ function generateHTMLTable(table) {
         output += "</tr>\n";
     });
 
-    // document.getElement
-
     $("table > tbody").innerHTML = output;
-    // console.log(output);
-
 }
 
 
