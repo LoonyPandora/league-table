@@ -48,10 +48,10 @@ window.onload = function () {
         tablesByDate[date] = getSortedTable(teams);
     });
 
-
     console.log(tablesByDate);
 
 }
+
 
 var tablesByDate = {};
 var teams = {};
@@ -59,16 +59,16 @@ var games = {};
 function loadTeams(teamList) {
     teamList.forEach(function(team) {
         teams[team.id] = {
-            id:             team.id,
-            name:           team.name,
-            played:         0,
-            wins:           0,
-            draws:          0,
-            losses:         0,
-            goalsFor:       0,
-            goalsAgainst:   0,
-            goalDifference: 0,
-            points:         0
+            id:              team.id,
+            name:            team.name,
+            played:          0,
+            wins:            0,
+            draws:           0,
+            losses:          0,
+            goalsFor:        0,
+            goalsAgainst:    0,
+            goalDifference:  0,
+            points:          0
         };
     });
 };
@@ -96,8 +96,11 @@ function loadGames(gameList) {
 function getSortedTable(table) {
     var sortedTable = [];
 
-    Object.keys(table).forEach(function(key) {
-        sortedTable.push(table[key]);
+    // REALLY ugly way to clone an object. Normally would use a library that's cleaner...
+    var clonedTable = JSON.parse(JSON.stringify(table));
+
+    Object.keys(clonedTable).forEach(function(key) {
+        sortedTable.push(clonedTable[key]);
     });
 
     sortedTable.sort(function (a, b) {
@@ -189,4 +192,5 @@ function pad(number) {
     }
     return str;
 };
+
 
