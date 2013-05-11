@@ -8,10 +8,17 @@ window.onload = function () {
     var ISODates = createDateRange();
 
     var tablesByDate = playGames();
+    var dates = Object.keys(tablesByDate);
 
-    Object.keys(tablesByDate).forEach(function (table) {
-        updateHTML(tablesByDate[table]);
-    })
+    // Update the table once per second
+    var i = 0;
+    var interval = setInterval(function() {
+        updateHTML(tablesByDate[dates[i]]);
+        i++;
+
+        // 104 matchdays in this years season
+        if (i === 104) clearInterval(interval);
+    }, 50);
 }
 
 
