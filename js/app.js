@@ -7,6 +7,62 @@
 window.onload = function () {
     var ISODates = createDateRange();
 
+    var tablesByDate = playGames();
+
+    Object.keys(tablesByDate).forEach(function (table) {
+        updateHTML(tablesByDate[table]);
+    })
+}
+
+
+
+// Global vars to put the JSONP stuff into
+var teams = {};
+var games = {};
+
+// Called by the JSONP
+function loadTeams(teamList) {
+    teamList.forEach(function(team) {
+        teams[team.id] = {
+            id:              team.id,
+            name:            team.name,
+            played:          0,
+            wins:            0,
+            draws:           0,
+            losses:          0,
+            goalsFor:        0,
+            goalsAgainst:    0,
+            goalDifference:  0,
+            points:          0
+        };
+    });
+};
+
+// Called by the JSONP
+function loadGames(gameList) {
+    gameList.forEach(function(game) {
+        var ISODate = convertToISO8601(game.date);
+
+        if (!games[ISODate]) { games[ISODate] = []; }
+
+        // The goals are a string instead of a numeric for some reason.
+        // Probably as a potential gotcha in this test..
+        games[ISODate].push({
+            date:       ISODate,
+            homeTeamId: game.homeTeamId,
+            awayTeamId: game.awayTeamId,
+            homeGoals:  parseInt(game.homeGoals, 10),
+            awayGoals:  parseInt(game.awayGoals, 10)
+        });
+    });
+};
+
+
+
+// Generates the main data structure containing results / teams / league tables etc
+function playGames() {
+    var tablesByDate = {};
+
     // May as well use the fast modern tools we have available if we don't support old browsers
     Object.keys(games).forEach(function(date, index, dates) {
         games[date].forEach(function(game) {
@@ -45,7 +101,7 @@ window.onload = function () {
         });
 
         // This is the table after all the games on a given date
-        tablesByDate[date] = getSortedTable(teams);
+        tablesByDate[date] = sortLeagueTable(teams);
 
         // Now calculate the movement of teams between matchdays
         tablesByDate[date].forEach(function(team, position) {
@@ -71,16 +127,15 @@ window.onload = function () {
             }
         });
     });
-
-    Object.keys(tablesByDate).forEach(function (table) {
-        generateHTMLTable(tablesByDate[table]);
-    })
+    
+    return tablesByDate;
 }
 
 
-// Generates the body portion of the table
+
+// Given a table array, generates the tbody portion of the HTML table.
 // Normally I'd use a templating library like mustache
-function generateHTMLTable(table) {
+function updateHTML(table) {
     var output = "";
     table.forEach(function(team) {
         output += "<tr>";
@@ -101,47 +156,9 @@ function generateHTMLTable(table) {
 
 
 
-var tablesByDate = {};
-var teams = {};
-var games = {};
-function loadTeams(teamList) {
-    teamList.forEach(function(team) {
-        teams[team.id] = {
-            id:              team.id,
-            name:            team.name,
-            played:          0,
-            wins:            0,
-            draws:           0,
-            losses:          0,
-            goalsFor:        0,
-            goalsAgainst:    0,
-            goalDifference:  0,
-            points:          0
-        };
-    });
-};
-
-function loadGames(gameList) {
-    gameList.forEach(function(game) {
-        var ISODate = convertToISO8601(game.date);
-
-        if (!games[ISODate]) { games[ISODate] = []; }
-
-        // The goals are a string instead of a numeric for some reason.
-        // Probably as a potential gotcha in this test..
-        games[ISODate].push({
-            date:       ISODate,
-            homeTeamId: game.homeTeamId,
-            awayTeamId: game.awayTeamId,
-            homeGoals:  parseInt(game.homeGoals, 10),
-            awayGoals:  parseInt(game.awayGoals, 10)
-        });
-    });
-};
 
 
-
-function getSortedTable(teams) {
+function sortLeagueTable(teams) {
     var sortedTable = [];
 
     // REALLY ugly way to clone an object. Normally would use a library that's cleaner...
