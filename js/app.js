@@ -8,16 +8,35 @@ window.onload = function () {
     var ISODates = createDateRange();
 
     var tablesByDate = playGames();
-    var dates = Object.keys(tablesByDate);
+    var gameDates = Object.keys(tablesByDate);
 
-    // Update the table once per second
+    // We update the header every day, but not every day has a match on it
     var i = 0;
     var interval = setInterval(function() {
-        updateHTML(tablesByDate[dates[i]]);
+
+        var j = gameDates.indexOf( ISODates[i] );
+        if (j !== -1) {
+            // Today's date is a match day, so update the table
+            updateHTML( tablesByDate[gameDates[j]] );
+        } else {
+            // Fade out the positional marker since it's not a match day
+            // and the movement is irre
+            var elems = $(".up, .down");
+            for (var x = 0; x < elems.length; x++) {
+                if (elems[x].className.match(/up/)) {
+                    elems[x].className = "animated fadeOutUpColor";
+                } else {
+                    elems[x].className = "animated fadeOutDownColor";
+                }
+                
+            };
+        }
+
+        $("h1").innerText = ISODates[i];
         i++;
 
-        // 104 matchdays in this years season
-        if (i === 104) clearInterval(interval);
+        // 276 days from start to end of the season
+        if (i === 276) clearInterval(interval);
     }, 500);
 }
 
@@ -145,7 +164,6 @@ function playGames() {
 function updateHTML(table) {
     var output = "";
     table.forEach(function(team) {
-        
         var classList = "";
         if (team.movement == "up") {
             classList = "animated fadeInUp up";
@@ -277,6 +295,11 @@ function pad(number) {
 
 // gives a nice jQuery-like way of selecting things
 function $(expr) {
-    return document.querySelectorAll(expr)[0];
+    if (document.querySelectorAll(expr).length === 1) {
+        return document.querySelectorAll(expr)[0];
+    } else {
+        return document.querySelectorAll(expr);
+    }
+    
 }
 
