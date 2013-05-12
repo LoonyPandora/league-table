@@ -3,9 +3,7 @@
 
 // All DOM stuff should wait until we have a DOM
 window.onload = function () {
-    
-    
-    bootstrap();
+    updateHTML(bootstrap());
 
     $("button").onclick = startAnimation;
 }
@@ -25,13 +23,14 @@ function bootstrap() {
         return 0;
     })
 
-    updateHTML(initialTable);
+    return initialTable;
 }
 
 
+// Kicks off the animation - attached to the button onclick
 function startAnimation() {
-    var button = this;
     // Make sure we can't set it running twice!
+    var button = this;
     button.disabled = true;
     button.innerText = "Animation Running"
 
@@ -42,7 +41,7 @@ function startAnimation() {
 
     // We update the header every day, but not every day has a match on it
     var i = 0;
-    var interval = setInterval(function() {
+    function animate () {
         var j = gameDates.indexOf( allDates[i] );
         if (j !== -1) {
             // Today's date is a match day, so update the table
@@ -73,9 +72,12 @@ function startAnimation() {
                 elems[x].className = "";
             };
         }
-    }, 500);
-}
+    };
 
+    // Don't delay by 500ms after the first click. Animate now, and the time will get the second game
+    animate();
+    var interval = setInterval(animate, 500);
+}
 
 
 // Global vars to put the JSONP stuff into
@@ -100,12 +102,13 @@ function loadTeams(teamList) {
     });
 };
 
+
 // Called by the JSONP
 function loadGames(gameList) {
     gameList.forEach(function(game) {
 
         if (!games[game.date]) { games[game.date] = []; }
-        
+
         // The goals are a string instead of a numeric for some reason.
         // Probably as a potential gotcha in this test..
         games[game.date].push({
@@ -117,7 +120,6 @@ function loadGames(gameList) {
         });
     });
 };
-
 
 
 // Generates the main data structure containing results / teams / league tables etc
@@ -193,11 +195,9 @@ function playGames() {
 }
 
 
-
 // Given a table array, generates the tbody portion of the HTML table.
 // Normally I'd use a templating library like mustache
 function updateHTML(table) {
-
     var output = "";
     table.forEach(function(team) {
         var classList = "";
@@ -222,12 +222,6 @@ function updateHTML(table) {
 
     $("table > tbody").innerHTML = output;
 }
-
-
-
-
-
-
 
 
 function sortLeagueTable(teams) {
@@ -257,32 +251,6 @@ function sortLeagueTable(teams) {
 }
 
 
-
-
-
-
-
-// Technically I wrote this before the test, so it should count as a library
-// But it's a common algorithm, and I wrote it out long form instead of the golf'd shortened way.
-function getOrdinal(number) {
-    // Using the explicit method instead of implicit conversion because this is a test
-    var end = parseInt(number.toString().slice(-1), 10);
-
-    if (number > 3 && number < 21) {
-        return "th";
-    } else if (end === 1) {
-        return "st";
-    } else if (end === 2) {
-        return "nd";
-    } else if (end === 3) {
-        return "rd";
-    } else {
-        return "th";
-    }
-}
-
-
-
 // Date math is HARD - I would never do. this in real life
 // See this great talk for reasons why it's silly to actually use this code
 // http://youtu.be/OhjOXrFHL7o
@@ -305,19 +273,19 @@ function createDateRange() {
         });
     });
 
+
+    // Pads single digits to 2 digits long with leading zeros
+    function pad(number) {
+        var str = "" + number;
+        while (str.length < 2) {
+            str = "0" + str;
+        }
+        return str;
+    }
+
+
     // We only need August 12th, 2011 - May 13th, 2012
     return dates.slice(224,500);
-}
-
-
-
-// Pads single digits to 2 digits long with leading zeros
-function pad(number) {
-    var str = "" + number;
-    while (str.length < 2) {
-        str = "0" + str;
-    }
-    return str;
 }
 
 
@@ -338,9 +306,27 @@ function humaniseDate(date) {
                     getOrdinal(parseInt(d[0], 10)) +
                     "</sup> 20" +
                     d[2];
-    
-    return humanDate;
 
+    // Technically I wrote this before the test, so it should count as a library
+    // But it's a common algorithm, and I wrote it out long form instead of the golf'd shortened way.
+    function getOrdinal(number) {
+        // Using the explicit method instead of implicit conversion because this is a test
+        var end = parseInt(number.toString().slice(-1), 10);
+
+        if (number > 3 && number < 21) {
+            return "th";
+        } else if (end === 1) {
+            return "st";
+        } else if (end === 2) {
+            return "nd";
+        } else if (end === 3) {
+            return "rd";
+        } else {
+            return "th";
+        }
+    }
+
+    return humanDate;
 }
 
 
@@ -351,6 +337,5 @@ function $(expr) {
     } else {
         return document.querySelectorAll(expr);
     }
-    
 }
 
