@@ -34,6 +34,12 @@ tr:nth-child(odd) {
     background: rgba(255,255,255,0.5);
 }
 
+/* Champions League and Relegation dividing lines */
+tr:nth-child(17), tr:nth-child(4) {
+    border-bottom: 1px dashed rgba(0,0,0,0.2);;
+}
+
+
 /* Give the team name a bit more width than strictly necessary */
 tr td:nth-child(1),
 tr th:nth-child(1) {
