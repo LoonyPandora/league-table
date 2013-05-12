@@ -60,7 +60,7 @@ function startAnimation() {
             };
         }
 
-        $("h1").innerText = allDates[i];
+        $("h1").innerHTML = humaniseDate(allDates[i]);
         i++;
 
         // 276 days from start to end of the season
@@ -73,7 +73,7 @@ function startAnimation() {
                 elems[x].className = "";
             };
         }
-    }, 10);
+    }, 500);
 }
 
 
@@ -266,7 +266,7 @@ function sortLeagueTable(teams) {
 // But it's a common algorithm, and I wrote it out long form instead of the golf'd shortened way.
 function getOrdinal(number) {
     // Using the explicit method instead of implicit conversion because this is a test
-    var end = number.toString().slice(-1);
+    var end = parseInt(number.toString().slice(-1), 10);
 
     if (number > 3 && number < 21) {
         return "th";
@@ -320,6 +320,28 @@ function pad(number) {
     return str;
 }
 
+
+// given a date like "dd/mm/yy", returns a nicer date like "January 1st 1970"
+// Would normally use moment.js for stuff like this, date math is hard
+function humaniseDate(date) {
+    var monthNames = [
+        "",       "January",   "February", "March",
+        "April",  "May",       "June",     "July",
+        "August", "September", "October",  "November", "December"
+    ];
+
+    var d = date.split("/");
+    var humanDate = monthNames[parseInt(d[1], 10)] +
+                    " " +
+                    parseInt(d[0], 10) +
+                    "<sup>" +
+                    getOrdinal(parseInt(d[0], 10)) +
+                    "</sup> 20" +
+                    d[2];
+    
+    return humanDate;
+
+}
 
 
 // gives a nice jQuery-like way of selecting things
