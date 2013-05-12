@@ -1,15 +1,18 @@
 // Trivial app, but it's always good to be strict
 "use strict";
 
-// Global vars to put the JSONP stuff into
-var teams = {};
-var games = {};
+// Global vars to put the JSONP stuff into, and config
+var config = {
+    teams:    {},
+    games:    {},
+    tickTime: 500 // Time in ms between each day
+};
 
 
 // Called by the JSONP
 function loadTeams(teamList) {
     teamList.forEach(function (team) {
-        teams[team.id] = {
+        config.teams[team.id] = {
             id:              team.id,
             name:            team.name,
             played:          0,
@@ -29,11 +32,11 @@ function loadTeams(teamList) {
 function loadGames(gameList) {
     gameList.forEach(function (game) {
 
-        if (!games[game.date]) { games[game.date] = []; }
+        if (!config.games[game.date]) { config.games[game.date] = []; }
 
         // The goals are a string instead of a numeric for some reason.
         // Probably as a potential gotcha in this test..
-        games[game.date].push({
+        config.games[game.date].push({
             date:       game.date,
             homeTeamId: game.homeTeamId,
             awayTeamId: game.awayTeamId,
@@ -77,10 +80,10 @@ function playGames() {
     var tablesByDate = {};
 
     // May as well use the fast modern tools we have available if we don't support old browsers
-    Object.keys(games).forEach(function (date, index, dates) {
-        games[date].forEach(function (game) {
-            var homeTeam = teams[game.homeTeamId];
-            var awayTeam = teams[game.awayTeamId];
+    Object.keys(config.games).forEach(function (date, index, dates) {
+        config.games[date].forEach(function (game) {
+            var homeTeam = config.teams[game.homeTeamId];
+            var awayTeam = config.teams[game.awayTeamId];
 
             homeTeam.played++;
             homeTeam.goalsFor += game.homeGoals;
@@ -115,7 +118,7 @@ function playGames() {
         });
 
         // This is the table after all the games on a given date
-        tablesByDate[date] = sortLeagueTable(teams);
+        tablesByDate[date] = sortLeagueTable(config.teams);
 
         // Now calculate the movement of teams between matchdays
         tablesByDate[date].forEach(function (team, position) {
@@ -179,7 +182,7 @@ function updateHTML(table) {
 function bootstrap() {
     var initialTable = [];
     for (var i = 1; i < 21; i++) {
-        initialTable.push(teams[i]);
+        initialTable.push(config.teams[i]);
     }
 
     // Sort the table alphabetically
@@ -321,7 +324,7 @@ function startAnimation() {
 
     // Don't delay by 500ms after the first click. Animate now, and the time will get the second game
     animate();
-    var interval = setInterval(animate, 500);
+    var interval = setInterval(animate, config.tickTime);
 }
 
 
