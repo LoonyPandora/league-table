@@ -2,9 +2,13 @@
 "use strict";
 
 // All DOM stuff should wait until we have a DOM
-// NOT doing this may improve performance, but it would be a premature
-// optimization at this stage with such a trivial app and no performance issues
+
 window.onload = function () {
+    $("button").onclick = startAnimation;
+}
+
+
+function startAnimation() {
     var allDates = createDateRange();
 
     var tablesByDate = playGames();
@@ -151,9 +155,7 @@ function playGames() {
             }
         });
     });
-    
-    console.log(tablesByDate);
-    
+
     return tablesByDate;
 }
 
