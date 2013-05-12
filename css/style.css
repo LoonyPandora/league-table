@@ -39,3 +39,9 @@ tr td:nth-child(1) {
 
 tr.up   { background-color: rgba(64,255,64, 0.5); }
 tr.down { background-color: rgba(255,64,64, 0.5); }
+
+h1 {
+    color: #fff;
+    margin-left: 80px;
+    text-shadow: 1px 1px 1px #000;
+}
