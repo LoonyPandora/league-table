@@ -30,6 +30,10 @@ function bootstrap() {
 
 
 function startAnimation() {
+    // Make sure we can't set it running twice!
+    this.disabled = true;
+    this.innerText = "Animation Running"
+
     var allDates = createDateRange();
 
     var tablesByDate = playGames();
