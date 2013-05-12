@@ -2,9 +2,30 @@
 "use strict";
 
 // All DOM stuff should wait until we have a DOM
-
 window.onload = function () {
+    
+    
+    bootstrap();
+
     $("button").onclick = startAnimation;
+}
+
+// Sets up the table in it's initial state
+function bootstrap() {
+    var initialTable = [];
+    for (var i = 1; i < 21; i++) {
+        initialTable.push(teams[i]);
+    };
+
+    // Sort the table alphabetically
+    // That's how it's always sorted on the first day of the season
+    initialTable.sort(function(a,b){
+        if (a.name < b.name) return -1;
+        if (a.name > b.name) return 1;
+        return 0;
+    })
+
+    updateHTML(initialTable);
 }
 
 
@@ -23,7 +44,7 @@ function startAnimation() {
             updateHTML( tablesByDate[gameDates[j]] );
         } else {
             // Fade out the positional marker since it's not a match day
-            // and the movement is irre
+            // and the movement is irrelevant
             var elems = $(".up, .down");
             for (var x = 0; x < elems.length; x++) {
                 if (elems[x].className.match(/up/)) {
@@ -164,6 +185,7 @@ function playGames() {
 // Given a table array, generates the tbody portion of the HTML table.
 // Normally I'd use a templating library like mustache
 function updateHTML(table) {
+
     var output = "";
     table.forEach(function(team) {
         var classList = "";
@@ -188,6 +210,9 @@ function updateHTML(table) {
 
     $("table > tbody").innerHTML = output;
 }
+
+
+
 
 
 
