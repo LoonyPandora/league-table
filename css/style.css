@@ -37,23 +37,23 @@ tr:nth-child(odd) {
 /* Give the team name a bit more width than strictly necessary */
 tr td:nth-child(1),
 tr th:nth-child(1) {
-    width: 150px;
+    width: 140px;
+    padding-left: 20px;
 }
 
+/* Background colours for teams moving up or down */
 tr.up   { background-color: rgba(64,255,64, 0.5); }
 tr.down { background-color: rgba(255,64,64, 0.5); }
 
 
+/* 630px wide so it fits on a mobile device with 5px to spare on each side */
+/* Could use box-sizing border-box - but don't fancy it this time */
 .header {
-    width: 630px;
+    width: 590px;
     padding: 0 20px;
     margin: 20px auto 20px auto;
     height: 96px;
     background: rgba(0,0,0,0.5);
-
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-            box-sizing: border-box;
 }
 
 h1 {
@@ -73,30 +73,24 @@ thead {
 }
 
 
-/* Positioned to be in the middle of the text */
+
+
+/* Lets make the button pretty. These are the bootstrap styles */
+/* Positioned to be in the middle of the h1 text */
 /* margin-top is half the height of the box, minus half-height of button */
 button {
     float: right;
     font-weight: bold;
     margin-top: 33px;
-}
-
-
-
-/* Lets make the button pretty */
-/* These are the bootstrap styles */
-button {
     width: 160px;
     display: block;
     padding: 4px 12px;
-    margin-bottom: 0;
     font-size: 14px;
     line-height: 20px;
     color: #444;
     text-align: center;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
     vertical-align: middle;
-    cursor: pointer;
     background-color: #f5f5f5;
     background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
@@ -119,10 +113,6 @@ button {
 button:hover, button:focus, button:active, button[disabled] {
     color: #333333;
     background-color: #e6e6e6;
-}
-
-button:active {
-    background-color: #cccccc;
 }
 
 button:hover, button:focus {
@@ -152,8 +142,8 @@ button:active {
 button[disabled] {
     cursor: not-allowed;
     background-image: none;
-    opacity: 0.9;
-    filter: alpha(opacity=90);
+    opacity: 0.6;
+    filter: alpha(opacity=60);
     -webkit-box-shadow: none;
        -moz-box-shadow: none;
             box-shadow: none;
