@@ -71,3 +71,59 @@
 }
 
 
+@-webkit-keyframes fadeOutUpColor {
+    0%   { background-color: rgba(64,255,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@-moz-keyframes fadeOutUpColor {
+    0%   { background-color: rgba(64,255,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@-o-keyframes fadeOutUpColor {
+    0%   { background-color: rgba(64,255,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@keyframes fadeOutUpColor {
+    0%   { background-color: rgba(64,255,64, 0.5); }
+    100% { background-color: none; }
+}
+
+
+.fadeOutUpColor {
+    -webkit-animation-name: fadeOutUpColor;
+       -moz-animation-name: fadeOutUpColor;
+         -o-animation-name: fadeOutUpColor;
+            animation-name: fadeOutUpColor;
+}
+
+
+@-webkit-keyframes fadeOutDownColor {
+    0%   { background-color: rgba(255,64,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@-moz-keyframes fadeOutDownColor {
+    0%   { background-color: rgba(255,64,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@-o-keyframes fadeOutDownColor {
+    0%   { background-color: rgba(255,64,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@keyframes fadeOutDownColor {
+    0%   { background-color: rgba(255,64,64, 0.5); }
+    100% { background-color: none; }
+}
+
+
+.fadeOutDownColor {
+    -webkit-animation-name: fadeOutDownColor;
+       -moz-animation-name: fadeOutDownColor;
+         -o-animation-name: fadeOutDownColor;
+            animation-name: fadeOutDownColor;
+}
