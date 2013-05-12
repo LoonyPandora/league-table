@@ -1,4 +1,5 @@
 // Trivial app, but it's always good to be strict
+/* exported loadTeams,loadGames  */
 "use strict";
 
 // Global vars to put the JSONP stuff into, and config
@@ -277,6 +278,7 @@ function createDateRange() {
 
 // Kicks off the animation - attached to the button onclick
 function startAnimation() {
+    /*jshint validthis:true*/
     // Make sure we can't set it running twice!
     var button = this;
     button.disabled = true;
