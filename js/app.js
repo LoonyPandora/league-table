@@ -30,9 +30,10 @@ function bootstrap() {
 
 
 function startAnimation() {
+    var button = this;
     // Make sure we can't set it running twice!
-    this.disabled = true;
-    this.innerText = "Animation Running"
+    button.disabled = true;
+    button.innerText = "Animation Running"
 
     var allDates = createDateRange();
 
@@ -56,7 +57,6 @@ function startAnimation() {
                 } else {
                     elems[x].className = "animated fadeOutDownColor";
                 }
-                
             };
         }
 
@@ -64,8 +64,16 @@ function startAnimation() {
         i++;
 
         // 276 days from start to end of the season
-        if (i === 276) clearInterval(interval);
-    }, 250);
+        if (i === 276) {
+            clearInterval(interval);
+            button.innerText = "Animation Finished"
+
+            var elems = $(".up, .down");
+            for (var x = 0; x < elems.length; x++) {
+                elems[x].className = "";
+            };
+        }
+    }, 10);
 }
 
 
