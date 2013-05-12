@@ -5,7 +5,7 @@
 // NOT doing this may improve performance, but it would be a premature
 // optimization at this stage with such a trivial app and no performance issues
 window.onload = function () {
-    var ISODates = createDateRange();
+    var allDates = createDateRange();
 
     var tablesByDate = playGames();
     var gameDates = Object.keys(tablesByDate);
@@ -13,8 +13,7 @@ window.onload = function () {
     // We update the header every day, but not every day has a match on it
     var i = 0;
     var interval = setInterval(function() {
-
-        var j = gameDates.indexOf( ISODates[i] );
+        var j = gameDates.indexOf( allDates[i] );
         if (j !== -1) {
             // Today's date is a match day, so update the table
             updateHTML( tablesByDate[gameDates[j]] );
@@ -32,12 +31,12 @@ window.onload = function () {
             };
         }
 
-        $("h1").innerText = ISODates[i];
+        $("h1").innerText = allDates[i];
         i++;
 
         // 276 days from start to end of the season
         if (i === 276) clearInterval(interval);
-    }, 500);
+    }, 250);
 }
 
 
@@ -67,14 +66,13 @@ function loadTeams(teamList) {
 // Called by the JSONP
 function loadGames(gameList) {
     gameList.forEach(function(game) {
-        var ISODate = convertToISO8601(game.date);
 
-        if (!games[ISODate]) { games[ISODate] = []; }
-
+        if (!games[game.date]) { games[game.date] = []; }
+        
         // The goals are a string instead of a numeric for some reason.
         // Probably as a potential gotcha in this test..
-        games[ISODate].push({
-            date:       ISODate,
+        games[game.date].push({
+            date:       game.date,
             homeTeamId: game.homeTeamId,
             awayTeamId: game.awayTeamId,
             homeGoals:  parseInt(game.homeGoals, 10),
@@ -153,6 +151,8 @@ function playGames() {
             }
         });
     });
+    
+    console.log(tablesByDate);
     
     return tablesByDate;
 }
@@ -248,38 +248,28 @@ function getOrdinal(number) {
 // See this great talk for reasons why it's silly to actually use this code
 // http://youtu.be/OhjOXrFHL7o
 
-// Gives us a nice list of ISO dates for 2011 and 2012
+// Gives us a nice list of dates for 2011 and 2012
 // 2012 is a leap year, but 2011 isn't. We don't include Feb 2011 in our calculations
 // So this doesn't matter. A non-trivial application would have to take this into account
 function createDateRange() {
-    var years = [2011, 2012];
+    var years = [11, 12];
     var monthLengths = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-    var ISODates = [];
+    var dates = [];
     // Native forEach loops are cool
     years.forEach(function(year) {
         monthLengths.forEach(function(monthLength, monthNumber) {
             for (var monthDay = 0; monthDay < monthLength; monthDay++) {
                 // All the month related stuff is zero indexed. Have to add 1 for display to humans
-                ISODates.push(year + "-" + pad(monthNumber + 1) + "-" + pad(monthDay + 1))
+                dates.push( pad(monthDay + 1) + "/" + pad(monthNumber + 1) + "/" + year)
             };
         });
     });
 
     // We only need August 12th, 2011 - May 13th, 2012
-    return ISODates.slice(224,500);
+    return dates.slice(224,500);
 }
 
-
-// A bit hairy. Clean this up
-function convertToISO8601(date) {
-    var ISODate = date.split("/").reverse();
-    ISODate[0] = 20 + ISODate[0];
-    ISODate[1] = pad(ISODate[1]);
-    ISODate[2] = pad(ISODate[2]);
-
-    return ISODate.join("-");
-}
 
 
 // Pads single digits to 2 digits long with leading zeros
