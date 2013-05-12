@@ -1,5 +1,6 @@
+/* Global Styles
+=========================================== */
 
-/* Global Page Styles */
 html {
     background: transparent;
 }
@@ -35,6 +36,7 @@ h1 {
     height: 96px;
     background: rgba(0,0,0,0.5);
 }
+
 
 
 /* Table Styles
@@ -77,8 +79,6 @@ tr th:nth-child(1) {
 /* Background colours for teams moving up or down */
 tr.up   { background-color: rgba(64,255,64, 0.5); }
 tr.down { background-color: rgba(255,64,64, 0.5); }
-
-
 
 
 
@@ -158,3 +158,136 @@ button[disabled] {
             box-shadow: none;
 }
 
+
+
+/* CSS 3 Animations (adapted from animate.css)
+=============================================== */
+
+.animated {
+    -webkit-animation-fill-mode: both;
+       -moz-animation-fill-mode: both;
+        -ms-animation-fill-mode: both;
+         -o-animation-fill-mode: both;
+            animation-fill-mode: both;
+
+    -webkit-animation-duration: 0.1s;
+       -moz-animation-duration: 0.1s;
+        -ms-animation-duration: 0.1s;
+         -o-animation-duration: 0.1s;
+            animation-duration: 0.1s;
+}
+
+
+@-webkit-keyframes fadeInUp {
+    0%   { -webkit-transform: translateY(20px); }
+    100% { -webkit-transform: translateY(0);    }
+}
+
+@-moz-keyframes fadeInUp {
+    0%   { -moz-transform: translateY(20px); }
+    100% { -moz-transform: translateY(0);    }
+}
+
+@-o-keyframes fadeInUp {
+    0%   { -o-transform: translateY(20px); }
+    100% { -o-transform: translateY(0);    }  
+}
+
+@keyframes fadeInUp {
+    0%   { transform: translateY(20px); }
+    100% { transform: translateY(0);    }
+}
+
+
+.fadeInUp {
+    -webkit-animation-name: fadeInUp;
+       -moz-animation-name: fadeInUp;
+         -o-animation-name: fadeInUp;
+            animation-name: fadeInUp;
+}
+
+@-webkit-keyframes fadeInDown {
+    0%   { -webkit-transform: translateY(-20px); }
+    100% { -webkit-transform: translateY(0);     }
+}
+
+@-moz-keyframes fadeInDown {
+    0%   { -moz-transform: translateY(-20px); }
+    100% { -moz-transform: translateY(0);     }
+}
+
+@-o-keyframes fadeInDown {
+    0%   { -o-transform: translateY(-20px); }
+    100% { -o-transform: translateY(0);     }
+}
+
+@keyframes fadeInDown {
+    0%   { transform: translateY(-20px); }
+    100% { transform: translateY(0);     }
+}
+
+
+.fadeInDown {
+    -webkit-animation-name: fadeInDown;
+       -moz-animation-name: fadeInDown;
+         -o-animation-name: fadeInDown;
+            animation-name: fadeInDown;
+}
+
+
+@-webkit-keyframes fadeOutUpColor {
+    0%   { background-color: rgba(64,255,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@-moz-keyframes fadeOutUpColor {
+    0%   { background-color: rgba(64,255,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@-o-keyframes fadeOutUpColor {
+    0%   { background-color: rgba(64,255,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@keyframes fadeOutUpColor {
+    0%   { background-color: rgba(64,255,64, 0.5); }
+    100% { background-color: none; }
+}
+
+
+.fadeOutUpColor {
+    -webkit-animation-name: fadeOutUpColor;
+       -moz-animation-name: fadeOutUpColor;
+         -o-animation-name: fadeOutUpColor;
+            animation-name: fadeOutUpColor;
+}
+
+
+@-webkit-keyframes fadeOutDownColor {
+    0%   { background-color: rgba(255,64,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@-moz-keyframes fadeOutDownColor {
+    0%   { background-color: rgba(255,64,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@-o-keyframes fadeOutDownColor {
+    0%   { background-color: rgba(255,64,64, 0.5); }
+    100% { background-color: none; }
+}
+
+@keyframes fadeOutDownColor {
+    0%   { background-color: rgba(255,64,64, 0.5); }
+    100% { background-color: none; }
+}
+
+
+.fadeOutDownColor {
+    -webkit-animation-name: fadeOutDownColor;
+       -moz-animation-name: fadeOutDownColor;
+         -o-animation-name: fadeOutDownColor;
+            animation-name: fadeOutDownColor;
+}
